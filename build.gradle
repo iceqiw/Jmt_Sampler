@@ -1,0 +1,40 @@
+plugins {
+    id 'java'
+    id 'idea'
+}
+
+group 'com.thoughtwork.framework'
+version '1.0'
+
+sourceCompatibility = 1.8
+
+repositories {
+    maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+    mavenCentral()
+}
+
+ext {
+    hadoopVersion = '3.1.0'
+    hiveVersion = '3.1.0'
+    lombokVersion = '1.18.10'
+}
+
+
+dependencies {
+    compileOnly "org.apache.jmeter:ApacheJMeter_java:5.2.1"
+    compileOnly "org.projectlombok:lombok:$lombokVersion"
+    compile "org.apache.hive:hive-metastore:$hadoopVersion"
+    compile "org.apache.hadoop:hadoop-mapreduce-client-core:$hiveVersion"
+    testCompile "junit:junit:4.12"
+}
+
+task copyJar(type: Copy, dependsOn: jar) {
+    from configurations.runtime
+    into '/Users/wei.qi/Dev/apache-jmeter-5.2.1/deps'
+}
+
+
+task copySample(type: Copy, dependsOn: jar) {
+    from project.buildDir.getPath() + '/libs/Jmt_Sampler-1.0.jar'
+    into '/Users/wei.qi/Dev/apache-jmeter-5.2.1/lib/ext'
+}
